@@ -357,7 +357,7 @@ fi
 
 if test -n "$with_tibae"; then
    if test -z "$rv_found"; then
-      AC_MSG_WARN([TIBCO Adapters SDK and TRA found, but no Rendezvous found, disabling tibae support])
+      AC_MSG_ERROR([TIBCO Adapters SDK and TRA found, but no Rendezvous found, disabling tibae support])
       unset with_tibae
    else
       AC_MSG_CHECKING([TIBCO Adapters SDK version])
@@ -366,7 +366,7 @@ if test -n "$with_tibae"; then
       elif test -e "$with_tibae"/version.txt; then
          TIBCO_SDK_VERSION=`grep SDK "$with_tibae"/version.txt|head -1|cut -b25- | cut -f1 -d\ `
       else
-         AC_MSG_RESULT([unable to determine TIBCO Adapters SDK version, disabling tibae support])
+         AC_MSG_ERROR([unable to determine TIBCO Adapters SDK version, disabling tibae support])
          unset with_tibae
       fi
 
@@ -387,7 +387,7 @@ if test -n "$with_tibae"; then
       AC_MSG_CHECKING([TIBCO Adapters TPCL])
       if test -n "$with_tibae_tpcl"; then
 	 if test ! -e "$with_tibae_tpcl/lib/libssl.a"; then
-	    AC_MSG_RESULT([can't find libssl.a in $with_tibae_tpcl/lib, disabling tibae support])
+	    AC_MSG_ERROR([can't find libssl.a in $with_tibae_tpcl/lib, disabling tibae support])
 	    unset with_tibae_tpcl
 	    unset with_tibae
 	 else
@@ -398,7 +398,7 @@ if test -n "$with_tibae"; then
 	    AC_MSG_RESULT([$TPCL_ROOT])
 	    with_tibae_tpcl=$TPCL_ROOT
 	 else
-	    AC_MSG_RESULT([not found, disabling tibae support])
+	    AC_MSG_ERROR([not found, disabling tibae support])
 	    unset with_tibae_tpcl
 	    unset with_tibae
 	 fi
@@ -406,8 +406,11 @@ if test -n "$with_tibae"; then
    fi
 fi
 
-if test -n "$with_tibae" -a -n "$with_:tibae_tra"; then
-   case "$TIBCO_SDK_VERSION" in
+if test -z "$with_tibae" -o -z "$with_tibae_tpcl"; then
+   AC_MSG_ERROR([])
+fi
+
+case "$TIBCO_SDK_VERSION" in
 	4.1.2) TIBAE_LDFLAGS="-L${with_tibae}/lib -lmaverick41 -lpthread"
 	       TIBAE_CPPFLAGS="-I${with_tibae}/include"
 	       AC_DEFINE(TIBCO_SDK, 4, [define for TIBCO SDK 4.*])
@@ -439,24 +442,24 @@ if test -n "$with_tibae" -a -n "$with_:tibae_tra"; then
                ;;
 	*)     AC_MSG_ERROR(Unsupported TIBCO SDK Version) 
 	       ;;
-   esac
+esac
 
-   case "${host_os}" in
+case "${host_os}" in
      *linux*)	TIBAE_CPPFLAGS="$TIBAE_CPPFLAGS -DLINUX24 -ldl"
 		;;
      *hpux*)    TIBAE_CPPFLAGS="$TIBAE_CPPFLAGS -DHP_UX +DAportable"
 		;;
      *)		TIBAE_CPPFLAGS="$TIBAE_CPPFLAGS -ldl"
 		;; 
-   esac
+esac
 
-   # check if C++ compiler can link with TIBCO libs
-   SAVE_CPPFLAGS="$CPPFLAGS"
-   SAVE_LDFLAGS="$LDFLAGS"
-   CPPFLAGS="$CPPFLAGS $TIBAE_CPPFLAGS $TIBRV_CPPFLAGS"
-   LDFLAGS="$LDFLAGS $TIBAE_LDFLAGS $TIBRV_LDFLAGS"
-   AC_MSG_CHECKING([if we can link to the TIBCO AE SDK])
-   AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+# check if C++ compiler can link with TIBCO libs
+SAVE_CPPFLAGS="$CPPFLAGS"
+SAVE_LDFLAGS="$LDFLAGS"
+CPPFLAGS="$CPPFLAGS $TIBAE_CPPFLAGS $TIBRV_CPPFLAGS"
+LDFLAGS="$LDFLAGS $TIBAE_LDFLAGS $TIBRV_LDFLAGS"
+AC_MSG_CHECKING([if we can link to the TIBCO AE SDK])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <Maverick.h>
 class TApp : public MApp
 {
@@ -470,19 +473,18 @@ class TApp : public MApp
 TApp ma(NULL);
 	]])], tibae_links=yes, tibae_links=no)
 
-   CPPFLAGS="$SAVE_CPPFLAGS"
-   LDFLAGS="$SAVE_LDFLAGS"
+CPPFLAGS="$SAVE_CPPFLAGS"
+LDFLAGS="$SAVE_LDFLAGS"
 
-   if test "$tibae_links" = "no"; then
-      AC_MSG_RESULT([failed with this C++ compiler, try CXX=<comp> configure, disabling tibae support])
-      unset with_tibae
-   else
-      AC_MSG_RESULT([ok])
-      AC_SUBST(TIBAE_LDFLAGS)
-      AC_SUBST(TIBAE_CPPFLAGS)
-      AC_DEFINE(TIBAE, 1, [Define if TIBCO Adapters support should be included])
-      with_tibae=yes
-   fi
+if test "$tibae_links" = "no"; then
+   AC_MSG_ERROR([failed with this C++ compiler, try CXX=<comp> configure, disabling tibae support])
+   unset with_tibae
+else
+   AC_MSG_RESULT([ok])
+   AC_SUBST(TIBAE_LDFLAGS)
+   AC_SUBST(TIBAE_CPPFLAGS)
+   AC_DEFINE(TIBAE, 1, [Define if TIBCO Adapters support should be included])
+   with_tibae=yes
 fi
 
 set_qore_cppflags()
