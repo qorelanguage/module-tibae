@@ -1,68 +1,38 @@
-tibrv module for Qore
+tibae module for Qore
 version 0.1 by David Nichols
 
-The "tibrv" module provides direct TIBCO Rendezvous(R) support, allowing qore programs to send and receive Rendezvous messages directly.
+The "tibae" module provides TIBCO Adapter support; it allows qore programs to send and receive messages to and from TIBCO Adapters (or implement a TIBCO Adapter in qore)  based on an external repository.
 
-Requires qore 0.7.0 and TIBCO Rendezvous(R) headers and libraries to build.
-Note that the TIBCO C++ library (libtibrvcpp.a or libtibrvcpp64.a) must be built with the same C++ compiler that is used to build the qore library and this module.
+This module provides the TibcoAdapter class.
 
-TIBCO Rendezvous(R) is a registered copyright of TIBCO, Inc.
+Note that previous versions of these release notes stated that it was not possible to make an adapter that sent synchronous replies - this is incorrect, just set the subject to the replySubject key of the incoming message hash which should be an inbox (point-to-point) subject name.
+* Linux: use the compiler required by the SDK version
+* Solaris: qore must be compiled with the SunPro CC compiler in order to be able to use the "tibae" module.
+* OS X: There is finally Rendezvous support for OS X, so hopefully they will support the Adapter SDK sometime soon
+
+TIBCO ActiveEnterprise(TM) is a trademark of TIBCO, Inc.
 
 Documentation TBA.
 
-test/example script: test/tibrv-test.q
+test/example scripts: test/tibae-test.q test/tibae-listener.q
 
-To use the new TIBCO Rendezvous support use the "%use tibrv" directive to ensure that the functionality is loaded
-
-Classes supplied by this module:
- + TibrvListener         - for listening to reliable messages
- + TibrvSender           - for sending reliable messages
- + TibrvCmListener       - for listening to certified messages
- + TibrvCmSender         - for sending certified messages
- + TibrvFtMember         - to implement a fault-tolerant node
- + TibrvFtMonitor        - to monitor a fault-tolerant group
- + TibrvDistributedQueue - to manage certified messages in a distributed queue
-
-NOTE: we do not send native Rendezvous arrays - we use the old style "multiple fields with the same name" approach to have more flexible arrays (different datatype in each element, etc).   Native Tibrv arrays are decoded properly when received.
-
-automatic type mapping:
-  TIBRVMSG_BOOL <-> boolean
-  TIBRVMSG_I8,U8,I16,U16,I32,U32,I64,U64 -> int (note there is a loss of precision with the U64 -> int conversion)
-  int -> TIBRVMSG_I64
-  TIBRVMSG_F32,F64 -> float
-  float -> TIBRVMSG_F64
-  TIBRVMSG_DATETIME <-> date
-  TIBRVMSG_OPAQUE <-> binary
-  TIBRVMSG_STRING -> string     (strings are marked with the default encoding for the object)
-  string -> TIBRVMSG_STRING     (encoding conversions are made if necessary to the encoding set for the object)
-  TIBRVMSG_XML -> string        (to explicitly send this type, use the tibrv_xml() function)
-  TIBRVMSG_IPPORT16 -> int      (to explicitly send this type, use the tibrv_ipport16() function)
-  TIBRVMSG_IPADDR32 -> string   (produces a string like "192.168.1.1" - to explicitly send this type, use the tibrv_ipaddr32() function)
-
-to do explicit qore->tibrv type mapping, use the following helper functions supplied by the module:
-  tibrv_i8()
-  tibrv_u8()
-  tibrv_i16()
-  tibrv_u16()
-  tibrv_i32()
-  tibrv_u32()
-  tibrv_i64()
-  tibrv_u64()
-  tibrv_f32()
-  tibrv_f64()
-  tibrv_ipport16()
-  tibrv_ipaddr32()  - note: takes a string argument like "192.168.1.1"
-  tibrv_xml()
-  tibrv_bool()
-
-set certificates for secure daemons using tibrvSetDaemonCert() and tibrvSetUserCertWithKey() using the SSLCertificate and SSLPrivateKey classes.  Note that these functions are only available if your tibrvcpp library was compiled with secure daemon support.
 
 BUILD AND INSTALL
 -----------------
 
-Set the RV_ROOT environment variable to the Rendezvous directory before calling configure (or use the --with-tibrv configure option) to build the "tibrv" module for direct Rendezvous support.
+Note that this module must be built with the compiler required by the TIBCO Adapter SDK in order for the "tibae" module to be built.
 
-Note that to build this module the libtibrvcpp library must be present; on some platforms you have to rebuild this yourself from the sources provided by TIBCO in order for it to link with the C++ compiler you are using - the sources are normally present in $RV_ROOT/src/librvcpp, normally you have to edit the Makefile provided there and then type "make" to rebuild.  I had to include "ranlib libtibrvcpp.a" on the libraries I rebuilt for OS X.  Secure daemon support is turned off by default in tibrvcpp, to enable secure daemon support edit $RV_ROOT/src/librvcpp/Makefile and uncomment the SD_MODULE line near the end of the file, rebuild, install the new library in $RV_ROOT/lib, and rerun qore's configure script.
+You must have both TIBCO Rendezvous and the AE SDK installed (along with the supported C++ compiler) before you can build this module.
+
+Make sure that the:
+*) RV_ROOT
+*) TRA_ROOT
+*) TPCL_ROOT and
+*) EMS_ROOT
+environment variables are pointing to your Rendezvous, SDK, TPCL, and EMS directories respectively before calling configure (EMS_ROOT only required for SDK 5.5 and above).
+
+Otherwise you can use the --with-tibrv, --with-tibae, with-tibae-tpcl, and --with-tibco-ems configure options.  The "tibae" module will compile with SDK 4.* versions, but there are so many bugs in this version of the SDK (including some horrible dynamic memory leaks) that it doesn't make sense to use anything before 5.2.1...
+Note that newer SDKs may work with HP-UX PA-RISC 11.*, so the restriction on building this module on HP-UX PA-RISC has been removed from the configure script.
 
 configure
 make
