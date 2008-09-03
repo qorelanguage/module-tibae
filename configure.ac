@@ -236,72 +236,10 @@ if test -n "$with_tibrv"; then
    # setup tibrv compile and link vars
    TIBRV_CPPFLAGS="-I${with_tibrv}/include"
    TIBRV_LDFLAGS="-L${with_tibrv}/lib -ltibrv${RVLIBSUFFIX} -ltibrvcm${RVLIBSUFFIX} -ltibrvcmq${RVLIBSUFFIX} -ltibrvft${RVLIBSUFFIX}"
-   # check for dynamic libtibrvcpp
-   if test -f "${with_tibrv}/lib/libtibrvcpp${RVLIBSUFFIX}.${SHLIB_SUFFIX}"; then
-      TIBRVCPP_LDFLAGS="-ltibrvcpp${RVLIBSUFFIX}"
-   else
-      TIBRVCPP_LDFLAGS="${with_tibrv}/lib/libtibrvcpp${RVLIBSUFFIX}.a"   
-   fi
 
-   # check if C++ compiler can link with TIBCO Rendezvous c++ libs
-   SAVE_CPPFLAGS="$CPPFLAGS"
-   SAVE_LDFLAGS="$LDFLAGS"
-   CPPFLAGS="$CPPFLAGS $TIBRV_CPPFLAGS"
-   LDFLAGS="$LDFLAGS $TIBRV_LDFLAGS $TIBRVCPP_LDFLAGS"
-
-   # hack to work around a bug in 64-bit g++ on linux? - if libtibrvcpp is not last on the compile line the link will fail for some reason
-   SAVE_LIBS="$LIBS"
-   LIBS="$LIBS -ltibrvcpp${RVLIBSUFFIX}"
-
-   AC_MSG_CHECKING([if we can link to the TIBCO Rendezvous C++ library])
-   AC_LINK_IFELSE([AC_LANG_PROGRAM(
-[[#include <tibrv/tibrvcpp.h>
-]],[[
-Tibrv::open();
-Tibrv::close();
-	]])],tibrv_links=yes, tibrv_links=no)
-
-   CPPFLAGS="$SAVE_CPPFLAGS"
-   LDFLAGS="$SAVE_LDFLAGS"
-   LIBS="$SAVE_LIBS"
-
-   if test ${tibrv_links} = "no"; then
-      AC_MSG_ERROR([failed: please recompile libtibrvcpp using this c++ compiler ($CXX) and install in $with_tibrv/lib and run configure again if you want the tibrv module])
-      unset with_tibrv
-      unset TIBRV_CPPFLAGS
-      unset TIBRV_LDFLAGS
-   else
-      AC_MSG_RESULT([ok])
-      # check if secure daemon support was enabled in libtibrvcpp
-      SAVE_CPPFLAGS="$CPPFLAGS"
-      SAVE_LDFLAGS="$LDFLAGS"
-      CPPFLAGS="$CPPFLAGS $TIBRV_CPPFLAGS"
-      LDFLAGS="$LDFLAGS $TIBRV_LDFLAGS"
-
-      AC_MSG_CHECKING([if secure daemon support was enabled in libtibrvcpp])
-      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#include <tibrv/tibrvcpp.h>
-#include <tibrv/sdcpp.h>
-	 ]],[[
-TibrvSdContext::setDaemonCert(TIBRV_SECURE_DAEMON_ANY_NAME, TIBRV_SECURE_DAEMON_ANY_CERT);
-	]])],tibrvsd_links=yes, tibrvsd_links=no)
-
-      CPPFLAGS="$SAVE_CPPFLAGS"
-      LDFLAGS="$SAVE_LDFLAGS"
-
-      if test "${tibrvsd_links}" = "yes"; then
-         AC_MSG_RESULT([ok])
-	 TIBRV_LDFLAGS="$TIBRV_LDFLAGS -ltibrvsd${RVLIBSUFFIX} -lssl -lcrypto"
-	 AC_DEFINE(TIBRV_SD, 1, Define if TIBCO Rendezvous secure daemon support should be included)
-      else
-         AC_MSG_ERROR([failed: if you want secure daemon support in the tibrv module, rebuild libtibrvcpp with secure daemon support (remove comments from the SD_MODULE line in $with_tibrv/src/librvcpp/Makefile), rebuild the library and install in $with_tibrv/lib and rerun configure])
-      fi
-      AC_SUBST(TIBRV_CPPFLAGS)
-      AC_SUBST(TIBRV_LDFLAGS)
-      AC_SUBST(TIBRVCPP_LDFLAGS)
-      AC_DEFINE(TIBRV, 1, Define if TIBCO Rendezvous support should be included)
-      with_tibrv=yes
-   fi
+   AC_SUBST(TIBRV_CPPFLAGS)
+   AC_SUBST(TIBRV_LDFLAGS)
+   AC_DEFINE(TIBRV, 1, Define if TIBCO Rendezvous support should be included)
 fi
 
 # set TRA_ROOT to SDK_ROOT if SDK_ROOT is set and TRA_ROOT is not
