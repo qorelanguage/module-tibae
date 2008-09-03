@@ -1,0 +1,25 @@
+if COND_SINGLE_COMPILATION_UNIT
+TIBAE_SOURCES = single-compilation-unit.cc
+else
+TIBAE_SOURCES = QoreApp.cc QC_TibcoAdapter.cc TibCommandLine.cc tibae.cc tibae-module.cc 
+endif
+
+lib_LTLIBRARIES = tibae.la
+tibae_la_SOURCES = $(TIBAE_SOURCES)
+tibae_la_LDFLAGS = -module -avoid-version $(TIBAE_LDFLAGS) ${TIBRV_LDFLAGS}
+tibae_la_CPPFLAGS = $(TIBAE_CPPFLAGS) $(TIBRV_CPPFLAGS)
+
+INCLUDES = -I$(top_srcdir)/include
+
+if COND_PROFILE
+AM_CXXFLAGS=-g -pg
+else
+if COND_DEBUG
+AM_CXXFLAGS=-g
+endif
+endif
+
+install-exec-hook:
+	mv $(libdir)/tibae.$(MODULE_SUFFIX) $(libdir)/tibae.qmod
+	rm -f $(libdir)/tibae.la
+
