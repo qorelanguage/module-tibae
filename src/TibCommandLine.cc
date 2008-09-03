@@ -29,8 +29,7 @@
 void TibCommandLine::add_intern(char *str)
 {
    // resize array
-   if (argc == alloc)
-   {
+   if (argc == alloc) {
       alloc += 10;
       argv = (char **)realloc(argv, sizeof(char *) * alloc);
    }
@@ -54,9 +53,9 @@ void TibCommandLine::add(const char *key, const char *val)
 {	 
    if (!argc)
       // add a dummy entry for the program name
-      add_intern("dummy");
+      add_intern((char *)"dummy");
    QoreString str;
-   add_intern("-system:clientVar");
+   add_intern((char *)"-system:clientVar");
    str.sprintf("%s=%s", key, val);
    add_intern(str.giveBuffer());
 }

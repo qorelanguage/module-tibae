@@ -1,9 +1,9 @@
 # Process this file with autoconf to produce a configure script.
 
 # AC_PREREQ(2.59)
-AC_INIT([qore-tibrv-module], [0.1],
+AC_INIT([qore-tibae-module], [0.1],
         [David Nichols <nicholsman@gmail.com>],
-        [qore-tibrv-module])
+        [qore-tibae-module])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADER([config.h])
 

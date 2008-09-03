@@ -487,12 +487,10 @@ MData *QoreApp::instantiate_sequence(const MSequenceClassDescription *msd, const
 {
    // ensure value is a QORE list
    // check if class info embedded
-   if (v && v->getType() == NT_HASH)
-   {
+   if (v && v->getType() == NT_HASH) {
       const QoreHashNode *h = reinterpret_cast<const QoreHashNode *>(v);
       const char *cn;
-      if (!(cn = get_class(h)))
-      {
+      if (!(cn = get_class(h))) {
          xsink->raiseException("TIBCO-MISSING-CLASS-NAME",
 			       "can't instantiate sequence of type '%s' from hash without '^class^' entry",
 			       msd->getFullName().c_str());
@@ -508,16 +506,14 @@ MData *QoreApp::instantiate_sequence(const MSequenceClassDescription *msd, const
 
    const QoreListNode *l = dynamic_cast<const QoreListNode *>(v);
 
-   if (!l)
-   {
+   if (!l) {
       xsink->raiseException("TIBCO-INVALID-TYPE-FOR-SEQUENCE", "cannot instantiate TIBCO sequence '%s' from node type '%s'",
 			    msd->getFullName().c_str(), v->getTypeName());
       return 0;
    }
 
    MSequence *seq = new MSequence(mcr, msd->getFullName());
-   for (int i = 0; i < l->size(); i++)
-   {
+   for (unsigned i = 0; i < l->size(); i++) {
       const AbstractQoreNode *ne = l->retrieve_entry(i);
       const MBaseClassDescription *mbcd = msd->getContainedClassDescription();
       printd(5, "instantiate_class() implicitly instantiating %s\n", mbcd->getFullName().c_str());
