@@ -32,7 +32,7 @@
 qore_classid_t CID_TIBAE;
 
 // usage: new TibcoAdapter(session-name, properties, classlist, [, service, network, daemon])
-void TIBAE_constructor(class QoreObject *self, const QoreListNode *params, ExceptionSink *xsink)
+void TIBAE_constructor(QoreObject *self, const QoreListNode *params, ExceptionSink *xsink)
 {
    QORE_TRACE("TIBAE_constructor");
 
@@ -85,7 +85,7 @@ void TIBAE_constructor(class QoreObject *self, const QoreListNode *params, Excep
 	  service ? service : "(null)", 
 	  network ? network : "(null)", 
 	  daemon  ? daemon  : "(null)");
-   class QoreApp *myQoreApp = NULL;
+   QoreApp *myQoreApp = NULL;
 
    MAppProperties *appProps = new MAppProperties();
 
@@ -121,13 +121,13 @@ void TIBAE_constructor(class QoreObject *self, const QoreListNode *params, Excep
 
 }
 
-void TIBAE_copy(class QoreObject *self, class QoreObject *old, class QoreApp *myQoreApp, class ExceptionSink *xsink)
+void TIBAE_copy(QoreObject *self, QoreObject *old, QoreApp *myQoreApp, class ExceptionSink *xsink)
 {
    xsink->raiseException("TIBCO-ADAPTER-COPY-ERROR", "copying TibcoAdapter objects is curently not supported");
 }
 
 // usage: TIBAE_sendSubject(subject, function_name, message)
-class AbstractQoreNode *TIBAE_sendSubject(class QoreObject *self, class QoreApp *myQoreApp, const QoreListNode *params, class ExceptionSink *xsink)
+class AbstractQoreNode *TIBAE_sendSubject(QoreObject *self, QoreApp *myQoreApp, const QoreListNode *params, class ExceptionSink *xsink)
 {
    const QoreStringNode *p0, *p1;
    const AbstractQoreNode *p2;
@@ -159,7 +159,7 @@ class AbstractQoreNode *TIBAE_sendSubject(class QoreObject *self, class QoreApp 
 }
 
 // usage: Tibco::sendSubjectWithSyncReply(subject, function_name, message[, timeout])
-class AbstractQoreNode *TIBAE_sendSubjectWithSyncReply(class QoreObject *self, class QoreApp *myQoreApp, const QoreListNode *params, class ExceptionSink *xsink)
+class AbstractQoreNode *TIBAE_sendSubjectWithSyncReply(QoreObject *self, QoreApp *myQoreApp, const QoreListNode *params, class ExceptionSink *xsink)
 {
    const QoreStringNode *p0, *p1;
    const AbstractQoreNode *p2, *p3;
@@ -197,7 +197,7 @@ class AbstractQoreNode *TIBAE_sendSubjectWithSyncReply(class QoreObject *self, c
 }
 
 // Tibco::receive(subject, [timeout])
-class AbstractQoreNode *TIBAE_receive(class QoreObject *self, class QoreApp *myQoreApp, const QoreListNode *params, class ExceptionSink *xsink)
+class AbstractQoreNode *TIBAE_receive(QoreObject *self, QoreApp *myQoreApp, const QoreListNode *params, class ExceptionSink *xsink)
 {
    const QoreStringNode *p0;
 
@@ -233,9 +233,9 @@ class AbstractQoreNode *TIBAE_receive(class QoreObject *self, class QoreApp *myQ
 //
 static AbstractQoreNode* TIBAE_operationsCallWithSyncResult(QoreObject* self, QoreApp* myQoreApp, const QoreListNode *params, ExceptionSink *xsink)
 {
-   char* err = "Invalid parameters. Expected: class name (string), method name (string), data (hash), "
+   const char* err = "Invalid parameters. Expected: class name (string), method name (string), data (hash), "
       "[timeout (integer in millis or date/time), ] [client name (string)]";
-   char* func = "TIBCO-OPERATIONS-CALL-WITH-SYNC_RESULT";
+   const char* func = "TIBCO-OPERATIONS-CALL-WITH-SYNC_RESULT";
    const QoreStringNode* class_name = test_string_param(params, 0);
    if (!class_name) {
       return xsink->raiseException(func, err);
@@ -278,9 +278,9 @@ static AbstractQoreNode* TIBAE_operationsCallWithSyncResult(QoreObject* self, Qo
 //
 static AbstractQoreNode* TIBAE_operationsOneWayCall(QoreObject* self, QoreApp* myQoreApp, const QoreListNode *params, ExceptionSink *xsink)
 {
-   char* err = "Invalid parameters. Expected: class name (string), method name (string), data (hash), "
+   const char* err = "Invalid parameters. Expected: class name (string), method name (string), data (hash), "
       "[client name (string)]";
-   char* func = "TIBCO-OPERATIONS-ONE-WAY-CALL";
+   const char* func = "TIBCO-OPERATIONS-ONE-WAY-CALL";
    const QoreStringNode* class_name = test_string_param(params, 0);
    if (!class_name) {
       return xsink->raiseException(func, err);
@@ -310,9 +310,9 @@ static AbstractQoreNode* TIBAE_operationsOneWayCall(QoreObject* self, QoreApp* m
 // Always return 0. To get the reply use combination of class name + method name passed to this call.
 static AbstractQoreNode* TIBAE_operationsAsyncCall(QoreObject* self, QoreApp* myQoreApp, const QoreListNode *params, ExceptionSink *xsink)
 {
-   char* err = "Invalid parameters. Expected: class name (string), method name (string), data (hash), "
+   const char* err = "Invalid parameters. Expected: class name (string), method name (string), data (hash), "
       "[timeout (integer in millis or date/time), ] [client name (string)]";
-   char* func = "TIBCO-OPERATIONS-ASYNC-CALL";
+   const char* func = "TIBCO-OPERATIONS-ASYNC-CALL";
    const QoreStringNode* class_name = test_string_param(params, 0);
    if (!class_name) {
       return xsink->raiseException(func, err);
@@ -360,8 +360,8 @@ static AbstractQoreNode* TIBAE_operationsAsyncCall(QoreObject* self, QoreApp* my
 //
 static AbstractQoreNode* TIBAE_operationsGetAsyncCallResult(QoreObject* self, QoreApp* myQoreApp, const QoreListNode *params, ExceptionSink *xsink)
 {
-   char* err = "Invalid parameters. Expected: class name (string), method name (string)";
-   char* func = "TIBCO-OPERATIONS-GET-ASYNC-RESULT";
+   const char* err = "Invalid parameters. Expected: class name (string), method name (string)";
+   const char* func = "TIBCO-OPERATIONS-GET-ASYNC-RESULT";
    const QoreStringNode* class_name = test_string_param(params, 0);
    if (!class_name) {
       return xsink->raiseException(func, err);
@@ -376,11 +376,11 @@ static AbstractQoreNode* TIBAE_operationsGetAsyncCallResult(QoreObject* self, Qo
    return myQoreApp->operationsGetAsyncCallResult(class_name_extracted, method_name_extracted, xsink);
 }
 
-class QoreClass *initTibcoAdapterClass()
+QoreClass *initTibcoAdapterClass()
 {
    QORE_TRACE("initTibcoAdapterClass()");
 
-   class QoreClass *QC_TIBAE = new QoreClass("TibcoAdapter", QDOM_NETWORK);
+   QoreClass *QC_TIBAE = new QoreClass("TibcoAdapter", QDOM_NETWORK);
    CID_TIBAE = QC_TIBAE->getID();
    //printd(5, "initTibcoAdapterClass() CID_TIBAE=%d\n", CID_TIBAE);
    QC_TIBAE->setConstructor(TIBAE_constructor);

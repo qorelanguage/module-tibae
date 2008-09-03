@@ -20,7 +20,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <Qore.h>
+#include <qore/Qore.h>
 
 #include "TibCommandLine.h"
 
