@@ -33,7 +33,7 @@ static class QoreNamespace *tibns; // Tibae namespace
 
 #ifndef QORE_MONOLITHIC
 DLLEXPORT char qore_module_name[] = "tibae";
-DLLEXPORT char qore_module_version[] = "0.2";
+DLLEXPORT char qore_module_version[] = "1.0";
 DLLEXPORT char qore_module_description[] = "TIBCO Active Enterprise module";
 DLLEXPORT char qore_module_author[] = "David Nichols";
 DLLEXPORT char qore_module_url[] = "http://qore.sourceforge.net";

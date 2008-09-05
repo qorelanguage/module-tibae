@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" 
+"/opt/local/share/xml/docbook-xml/4.3/docbookx.dtd"
+[
+  <!ENTITY bookinfo         SYSTEM "bookinfo.docbook">
+  <!ENTITY tibae_module     SYSTEM "tibae-module.docbook">
+]>
+
+<!-- 
+"/usr/share/sgml/docbook/xml-dtd-4.4-1.0-30.1/docbookx.dtd"
+-->
+
+<book>
+
+&tibae_module;
+&bookinfo;
+
+</book>

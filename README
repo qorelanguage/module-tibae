@@ -3,16 +3,17 @@ version 0.1 by David Nichols
 
 The "tibae" module provides TIBCO Adapter support; it allows qore programs to send and receive messages to and from TIBCO Adapters (or implement a TIBCO Adapter in qore)  based on an external repository.
 
-This module provides the TibcoAdapter class.
+This module provides the TibcoAdapter class and associated constants and helper functions.
 
-Note that previous versions of these release notes stated that it was not possible to make an adapter that sent synchronous replies - this is incorrect, just set the subject to the replySubject key of the incoming message hash which should be an inbox (point-to-point) subject name.
+Note that early versions of these release notes stated that it was not possible to make an adapter that sent synchronous replies - this is incorrect, just set the subject to the replySubject key of the incoming message hash which should be an inbox (point-to-point) subject name.
 * Linux: use the compiler required by the SDK version
 * Solaris: qore must be compiled with the SunPro CC compiler in order to be able to use the "tibae" module.
 * OS X: There is finally Rendezvous support for OS X, so hopefully they will support the Adapter SDK sometime soon
 
 TIBCO ActiveEnterprise(TM) is a trademark of TIBCO, Inc.
 
-Documentation TBA.
+Documentation in docs/tibco-module-doc.html
+(built from docbook sources in docs/docbook/*)
 
 test/example scripts: test/tibae-test.q test/tibae-listener.q
 

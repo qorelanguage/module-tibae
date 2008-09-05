@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<bookinfo>
+<title>TIBCO ActiveEnterprise(TM) Module 1.0</title>
+<subtitle>Module Reference Manual</subtitle>
+<authorgroup>
+<author>
+<firstname>David</firstname>
+<surname>Nichols</surname>
+</author>
+</authorgroup>
+
+<date>5 September 2008</date>
+<releaseinfo>V. 1.0</releaseinfo>
+
+<revhistory>
+
+<revision>
+  <revnumber>1.0</revnumber>
+  <date>5 September 2008</date>
+  <authorinitials>dn</authorinitials>
+  <revremark>split from qore documentation</revremark>
+</revision>
+
+</revhistory>
+
+</bookinfo>
+
+<!-- Copyright (C) 2003-2008 David Nichols, All Rights Reserved -->
