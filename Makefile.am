@@ -10,6 +10,7 @@ noinst_HEADERS = src/QC_TibcoAdapter.h \
 
 EXTRA_DIST = COPYING ChangeLog AUTHORS README \
 	test/tibae-test.q \
+	docs/tibae-module-doc.html \
 	qore-tibae-module.spec
 
 libtool: $(LIBTOOL_DEPS)
