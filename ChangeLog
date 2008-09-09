@@ -1,0 +1,57 @@
+2008-09-08 17:45  david_nichols
+
+	* Makefile.am, qore-tibae-module.spec: fixed rpm packaging for docs
+
+2008-09-06 07:08  david_nichols
+
+	* Makefile.am, qore-tibae-module.spec: added documentation
+
+2008-09-05 13:47  david_nichols
+
+	* README, configure.ac, docs, docs/docbook, docs/docbook/Makefile,
+	  docs/docbook/bookinfo.docbook, docs/docbook/driver.xsl,
+	  docs/docbook/module.docbook, docs/docbook/tibae-module.docbook,
+	  docs/img, docs/img/acrobat.gif, docs/img/acrobat_a.gif,
+	  docs/img/disk.gif, docs/img/qbullet-note.gif,
+	  docs/img/qbullet-note_a.gif, docs/img/remote.gif,
+	  docs/img/remote_a.gif, docs/img/scrollup.gif,
+	  docs/img/scrollup_a.gif, docs/img/word.gif, docs/qore-style.css,
+	  docs/tibae-module-doc.html, qore-tibae-module.spec,
+	  src/tibae-module.cc: added documentation as split from qore
+	  library
+
+2008-09-03 13:07  david_nichols
+
+	* README, test/tibae-listener.q: updated docs and added example
+	  program
+
+2008-09-03 12:51  david_nichols
+
+	* configure.ac: removed check for libtibrvcpp compatibility as it's
+	  not used by this module
+
+2008-09-03 12:48  david_nichols
+
+	* configure.ac, src/QoreApp.cc, src/TibCommandLine.cc: more build
+	  fixes
+
+2008-09-03 12:43  david_nichols
+
+	* src/QC_TibcoAdapter.cc, src/TibCommandLine.cc: build fixes
+
+2008-09-03 12:41  david_nichols
+
+	* configure.ac: build fixes
+
+2008-09-03 12:28  david_nichols
+
+	* ., AUTHORS, COPYING, ChangeLog, INSTALL, Makefile.am, NEWS,
+	  README, README.operations, configure.ac, ltmain.sh, m4,
+	  m4/acx_pthread.m4, qore-tibae-module.spec, reconf.sh, src,
+	  src/Makefile.am, src/QC_TibcoAdapter.cc, src/QC_TibcoAdapter.h,
+	  src/QoreApp.cc, src/QoreApp.h, src/TibCommandLine.cc,
+	  src/TibCommandLine.h, src/single-compilation-unit.cc,
+	  src/tibae-module.cc, src/tibae-module.h, src/tibae.cc,
+	  src/tibae.h, test, test/tibae-test.q: initial import as
+	  independent project
+
