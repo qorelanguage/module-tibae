@@ -10,6 +10,8 @@ noinst_HEADERS = src/QC_TibcoAdapter.h \
 
 EXTRA_DIST = COPYING ChangeLog AUTHORS README \
 	test/tibae-test.q \
+	test/tibae-listener.q \
+	test/new.dat \
 	docs/tibae-module-doc.html \
 	docs/qore-style.css \
         docs/img/acrobat_a.gif \
