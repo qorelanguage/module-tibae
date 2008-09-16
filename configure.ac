@@ -266,7 +266,7 @@ else
       AC_MSG_RESULT([$TRA_ROOT])
       with_tibae=$TRA_ROOT      
    else
-      AC_MSG_RESULT([not found])
+      AC_MSG_ERROR([not found; cannot build without AE SDK support])
       unset with_tibae
    fi
 fi
