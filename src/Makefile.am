@@ -11,6 +11,8 @@ tibae_la_CPPFLAGS = $(TIBAE_CPPFLAGS) $(TIBRV_CPPFLAGS)
 
 INCLUDES = -I$(top_srcdir)/include
 
+AM_CPPFLAGS = ${QORE_CPPFLAGS}
+
 if COND_PROFILE
 AM_CXXFLAGS=-g -pg
 else
