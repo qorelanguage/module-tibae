@@ -1,3 +1,25 @@
+2008-10-01 20:02  david_nichols
+
+	* src/Makefile.am: fixed makefile for qore cppflags
+
+2008-09-16 20:54  david_nichols
+
+	* configure.ac: build and configure fixes
+
+2008-09-14 07:21  david_nichols
+
+	* Makefile.am, qore-tibae-module.spec: fixed tibae packaging to
+	  include all test scripts and test adapter
+
+2008-09-14 07:16  david_nichols
+
+	* test/new.dat: moved test adapter to tibae project
+
+2008-09-09 07:20  david_nichols
+
+	* ChangeLog, qore-tibae-module.spec: updated license in spec file
+	  to LGPL, updated ChangeLog
+
 2008-09-08 17:45  david_nichols
 
 	* Makefile.am, qore-tibae-module.spec: fixed rpm packaging for docs
