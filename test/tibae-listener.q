@@ -9,7 +9,7 @@ sub getAdapter()
     $props.AppInfo = "test";
 
     $props.AppName = "testAdapter";
-    $props.RepoURL = "./new.dat";
+    $props.RepoURL = get_script_dir() + "/new.dat";
     $props.ConfigURL = "/tibco/private/adapter/testAdapter";
     my $classes.Test = "/tibco/public/class/ae/Test";
 

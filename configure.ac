@@ -242,12 +242,12 @@ if test -n "$with_tibrv"; then
    AC_DEFINE(TIBRV, 1, Define if TIBCO Rendezvous support should be included)
 fi
 
-# set TRA_ROOT to SDK_ROOT if SDK_ROOT is set and TRA_ROOT is not
-if test -n "$SDK_ROOT" -a -z "$TRA_ROOT"; then TRA_ROOT=$SDK_ROOT; fi
+# set SDK_ROOT to TRA_ROOT if TRA_ROOT is set and SDK_ROOT is not
+if test -n "$TRA_ROOT" -a -z "$SDK_ROOT"; then SDK_ROOT=$TRA_ROOT; fi
 
 AC_ARG_WITH([tibae],
   [AS_HELP_STRING([--with-tibae@<:@=DIR@:>@],
-		  [TIBCO Adapters SDK directory (defaults to $TRA_ROOT)])],
+		  [TIBCO Adapters SDK directory (defaults to $SDK_ROOT)])],
   [if test ! -d "${with_tibae}"; then AC_MSG_ERROR(bad value ${with_tibae} for --with-tibae); unset with_tibae; fi])
 
 AC_MSG_CHECKING([TIBCO Adapters SDK])
@@ -262,9 +262,9 @@ else
    if test "$OS" = "HP-UX" -a $host_cpu != "ia64"; then
       AC_MSG_WARN([TIBCO Adapters SDK not supported on HP-UX])
       unset with_tibae
-   elif test -n "$TRA_ROOT" -a \( -f "$TRA_ROOT/include/sdk/Maverick.h" -o -f "$TRA_ROOT/include/Maverick.h" \) 2>/dev/null; then
-      AC_MSG_RESULT([$TRA_ROOT])
-      with_tibae=$TRA_ROOT      
+   elif test -n "$SDK_ROOT" -a \( -f "$SDK_ROOT/include/sdk/Maverick.h" -o -f "$SDK_ROOT/include/Maverick.h" \) 2>/dev/null; then
+      AC_MSG_RESULT([$SDK_ROOT])
+      with_tibae=$SDK_ROOT      
    else
       AC_MSG_ERROR([not found; cannot build without AE SDK support])
       unset with_tibae
