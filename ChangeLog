@@ -1,3 +1,13 @@
+2008-10-07 18:12  david_nichols
+
+	* README, configure.ac, test/tibae-listener.q, test/tibae-test.q:
+	  fixed configure, fixed test scripts to look for adapter file in
+	  the same directory as the script
+
+2008-10-07 06:20  david_nichols
+
+	* ChangeLog: updated changelog
+
 2008-10-01 20:02  david_nichols
 
 	* src/Makefile.am: fixed makefile for qore cppflags
