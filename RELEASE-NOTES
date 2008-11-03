@@ -1,0 +1,67 @@
+
+-------------
+Version 1.0.1
+-------------
+
+fixed module naming and module directory handling to correspond to changes in
+qore 0.7.1
+
+made qore 0.7.1 the minimum version for compiling the module
+
+
+-----------
+Version 1.0
+-----------
+
+Initial release; see README for more information
+
+
+----------
+Qore 0.6.2
+----------
+
+the tibae module (TIBCO ActiveEnterprise/Adapters(TM) module) now can deal
+with interval, time, and binary types.  Milliseconds are now preserved with
+datetime and time when sending and receiving.
+
+the tibae_type() function has been added to allow control over how types are
+serialized (useful with the "any" type or to override default serialization).
+New constants have been added to the Tibae namespace for use with the
+tibae_type() function:
+        TIBAE_BINARY
+        TIBAE_BOOLEAN
+        TIBAE_BYTE
+        TIBAE_CHAR
+        TIBAE_DATE
+        TIBAE_DATETIME
+        TIBAE_FIXED
+        TIBAE_I1
+        TIBAE_I2
+        TIBAE_I4
+        TIBAE_I8
+        TIBAE_INTERVAL
+        TIBAE_R4
+        TIBAE_R8
+        TIBAE_STRING
+        TIBAE_TIME
+        TIBAE_U1
+        TIBAE_U2
+        TIBAE_U4
+        TIBAE_U8
+
+
+----------
+Qore 0.6.0
+----------
+
+The "tibae" module added new methods to the TibcoAdapter class to support
+client-side synchronous operation calls
+
+
+----------
+Qore 0.5.3
+----------
+
+the "tibco" module was renamed "tibae" to be consistent with the new "tibrv"
+module
+programs requiring the old "tibco" module should now use "%requires tibae"

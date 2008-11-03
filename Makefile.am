@@ -9,6 +9,7 @@ noinst_HEADERS = src/QC_TibcoAdapter.h \
 	src/TibCommandLine.h
 
 EXTRA_DIST = COPYING ChangeLog AUTHORS README \
+	RELEASE-NOTES \
 	test/tibae-test.q \
 	test/tibae-listener.q \
 	test/new.dat \

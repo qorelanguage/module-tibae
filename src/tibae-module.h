@@ -24,10 +24,12 @@
 
 #define _QORE_TIBCO_MODULE_H
 
+#include "../config.h"
+
 #include <qore/Qore.h>
 
 QoreStringNode *tibae_module_init();
-void tibae_module_ns_init(class QoreNamespace *rns, class QoreNamespace *qns);
+void tibae_module_ns_init(QoreNamespace *rns, QoreNamespace *qns);
 void tibae_module_delete();
 
 #endif

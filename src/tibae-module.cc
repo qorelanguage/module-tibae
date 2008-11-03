@@ -22,18 +22,16 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <qore/Qore.h>
-
 #include "tibae-module.h"
+
 #include "QC_TibcoAdapter.h"
 
 #include <string.h>
 
 static class QoreNamespace *tibns; // Tibae namespace
 
-#ifndef QORE_MONOLITHIC
 DLLEXPORT char qore_module_name[] = "tibae";
-DLLEXPORT char qore_module_version[] = "1.0";
+DLLEXPORT char qore_module_version[] = PACKAGE_VERSION;
 DLLEXPORT char qore_module_description[] = "TIBCO Active Enterprise module";
 DLLEXPORT char qore_module_author[] = "David Nichols";
 DLLEXPORT char qore_module_url[] = "http://qore.sourceforge.net";
@@ -43,14 +41,11 @@ DLLEXPORT qore_module_init_t qore_module_init = tibae_module_init;
 DLLEXPORT qore_module_ns_init_t qore_module_ns_init = tibae_module_ns_init;
 DLLEXPORT qore_module_delete_t qore_module_delete = tibae_module_delete;
 DLLEXPORT qore_license_t qore_module_license = QL_LGPL;
-#endif
 
-static class AbstractQoreNode *f_tibae_type(const QoreListNode *params, class ExceptionSink *xsink)
-{
+static class AbstractQoreNode *f_tibae_type(const QoreListNode *params, class ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
    int type = p->getAsInt();
-   if (type < 1 || type > MAX_TIBAE_TYPE)
-   {
+   if (type < 1 || type > MAX_TIBAE_TYPE) {
       xsink->raiseException("TIBAE-TYPE-ERROR", "type %d is out of range (expecting 1 - %d)", type, MAX_TIBAE_TYPE);
       return 0;
    }
@@ -61,8 +56,7 @@ static class AbstractQoreNode *f_tibae_type(const QoreListNode *params, class Ex
    return h;
 }
 
-static void setup_namespace()
-{
+static void setup_namespace() {
    // setup static "master" namespace
    tibns = new QoreNamespace("Tibae");
    tibns->addSystemClass(initTibcoAdapterClass());
@@ -90,8 +84,7 @@ static void setup_namespace()
    tibns->addConstant("TIBAE_U8",          new QoreBigIntNode(TIBAE_U8));
 }
 
-class QoreStringNode *tibae_module_init()
-{
+QoreStringNode *tibae_module_init() {
    setup_namespace();
 
    // add builtin functions
@@ -99,19 +92,14 @@ class QoreStringNode *tibae_module_init()
    return NULL;
 }
 
-void tibae_module_ns_init(class QoreNamespace *rns, class QoreNamespace *qns)
-{
+void tibae_module_ns_init(class QoreNamespace *rns, class QoreNamespace *qns) {
    QORE_TRACE("tibae_module_ns_init()");
 
    qns->addInitialNamespace(tibns->copy());
-
-
 }
 
-void tibae_module_delete()
-{
+void tibae_module_delete() {
    QORE_TRACE("tibae_module_delete()");
    delete tibns;
-
 }
 

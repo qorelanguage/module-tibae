@@ -20,7 +20,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <qore/Qore.h>
+#include "tibae-module.h"
 
 #include "QoreApp.h"
 
@@ -37,8 +37,7 @@
 
 static void remove_pending_calls(MApp* app);
 
-static const char *get_class(const QoreHashNode *h)
-{
+static const char *get_class(const QoreHashNode *h) {
    const AbstractQoreNode *t;
 
    if (!(t = h->getKeyValue("^class^")))

@@ -22,6 +22,6 @@ endif
 endif
 
 install-exec-hook:
-	mv $(DESTDIR)$(libdir)/tibae.$(MODULE_SUFFIX) $(DESTDIR)$(libdir)/tibae.qmod
+	mv $(DESTDIR)$(libdir)/tibae.$(MODULE_SUFFIX) $(DESTDIR)$(libdir)/tibae-api-$(MODULE_API).qmod
 	rm -f $(DESTDIR)$(libdir)/tibae.la
 
