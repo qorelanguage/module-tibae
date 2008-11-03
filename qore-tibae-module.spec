@@ -43,7 +43,7 @@
 
 Summary: TIBCO Rendezvous integration module for Qore
 Name: qore-tibae-module
-Version: 1.0
+Version: 1.0.1
 Release: 1%{dist}
 License: LGPL
 Group: Development/Languages
