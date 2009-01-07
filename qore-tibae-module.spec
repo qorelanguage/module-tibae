@@ -3,31 +3,29 @@
 
 %if 0%{?sles_version}
 
-%if 0%{?sles_version} == 10
-%define dist .sle10
-%endif
-
-%if 0%{?sles_version} == 9
-%define dist .sle9
-%endif
+%define dist .sles{?sles_version}
 
 %else
 %if 0%{?suse_version}
+
+%if 0%{?suse_version} == 1110
+%define dist .opensuse11_1
+%endif
 
 %if 0%{?suse_version} == 1100
 %define dist .opensuse11
 %endif
 
 %if 0%{?suse_version} == 1030
-%define dist .opensuse10.3
+%define dist .opensuse10_3
 %endif
 
 %if 0%{?suse_version} == 1020
-%define dist .opensuse10.2
+%define dist .opensuse10_2
 %endif
 
 %if 0%{?suse_version} == 1010
-%define dist .suse10.1
+%define dist .suse10_1
 %endif
 
 %if 0%{?suse_version} == 1000
@@ -35,7 +33,7 @@
 %endif
 
 %if 0%{?suse_version} == 930
-%define dist .suse9.3
+%define dist .suse9_3
 %endif
 
 %endif
@@ -43,7 +41,7 @@
 
 Summary: TIBCO Rendezvous integration module for Qore
 Name: qore-tibae-module
-Version: 1.0.1
+Version: 1.0.2
 Release: 1%{dist}
 License: LGPL
 Group: Development/Languages
@@ -91,5 +89,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING README RELEASE-NOTES ChangeLog AUTHORS test/ docs/
 
 %changelog
+* Web Jan 7 2009 David Nichols <david_nichols@users.sourceforge.net>
+- updated version to 1.0.2
+
 * Tue Sep 2 2008 David Nichols <david_nichols@users.sourceforge.net>
 - initial spec file for separate tibae release
