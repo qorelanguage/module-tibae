@@ -55,7 +55,7 @@
 
 Summary: TIBCO Rendezvous integration module for Qore
 Name: qore-tibae-module
-Version: 1.0.2
+Version: 1.0.3
 Release: 1%{dist}
 License: LGPL
 Group: Development/Languages
@@ -103,7 +103,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING README RELEASE-NOTES ChangeLog AUTHORS test/ docs/
 
 %changelog
-* Web Jan 7 2009 David Nichols <david_nichols@users.sourceforge.net>
+* Wed Aug 26 2009 David Nichols <david_nichols@users.sourceforge.net>
+- updated version to 1.0.3
+
+* Wed Jan 7 2009 David Nichols <david_nichols@users.sourceforge.net>
 - updated version to 1.0.2
 
 * Tue Sep 2 2008 David Nichols <david_nichols@users.sourceforge.net>

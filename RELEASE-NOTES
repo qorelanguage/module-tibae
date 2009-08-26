@@ -1,4 +1,15 @@
 -------------
+Version 1.0.3
+-------------
+
+fixed memory leaks in TibcoAdapter::sendSubjectWithSyncReply() when an error
+occurs creating the MPublisher
+
+fixed other memory leaks in exception handling in TIBCO message processing by
+using std::auto_ptr to handle memory deallocations automatically
+
+
+-------------
 Version 1.0.2
 -------------
 
