@@ -3,6 +3,19 @@ Version 1.0.4
 -------------
 
 updated date/time APIs to for qore 0.8.0 release
+when compiled with qore 0.8.0:
+* MDateTime values are serialized (Qore DateTimeNode -> MDateTime) with UTC
+  time directly, the SDK is not used to convert from local time, because the
+  calling context may have a different idea of local time than the TIBCO SDK
+* MDateTime values are deserialized (MDateTime -> Qore DateTimeNode) using
+  UTC time as given in the native data format and tagged with the local time
+  zone of the caller
+* MTime values are serialized and deserialized with local time
+* microseconds are preserved wherever possible (MTime, MDateTime conversions)
+
+Qore's internal absolute date/time value representation (DateTimeNode) now
+matches TIBCO's much closer and conversions generally either do not require
+any calculations or require very simple calculations (i.e. they are faster)
 
 
 -------------

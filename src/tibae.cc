@@ -134,7 +134,7 @@ class AbstractQoreNode *map_mdata_to_node(MData *md, ExceptionSink *xsink)
    const MDateTime *mdt;
    if ((mdt = MDateTime::downCast(md)))
 #ifdef _QORE_HAS_TIME_ZONES
-      return DateTimeNode::makeAbsolute(currentTZ(), mdt->getYear(), mdt->getMonth(), mdt->getDay(), mdt->getHour(), mdt->getMinute(), mdt->getSecond(), mdt->getMicroSeconds());
+      return DateTimeNode::makeAbsolute(currentTZ(), mdt->getTime(), mdt->getMicroSeconds());
 #else
       return new DateTimeNode(mdt->getYear(), mdt->getMonth(), mdt->getDay(), mdt->getHour(), mdt->getMinute(), mdt->getSecond(), mdt->getMicroSeconds() / 1000);
 #endif
