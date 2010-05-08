@@ -1,8 +1,8 @@
 # Process this file with autoconf to produce a configure script.
 
 # AC_PREREQ(2.59)
-AC_INIT([qore-tibae-module], [1.0.3],
-        [David Nichols <nicholsman@gmail.com>],
+AC_INIT([qore-tibae-module], [1.0.4],
+        [David Nichols <david@qore.org>],
         [qore-tibae-module])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADER([config.h])

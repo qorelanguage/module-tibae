@@ -8,6 +8,10 @@
 %else
 %if 0%{?suse_version}
 
+%if 0%{?suse_version} == 1130
+%define dist .opensuse11_3
+%endif
+
 %if 0%{?suse_version} == 1120
 %define dist .opensuse11_2
 %endif
@@ -55,7 +59,7 @@
 
 Summary: TIBCO Rendezvous integration module for Qore
 Name: qore-tibae-module
-Version: 1.0.3
+Version: 1.0.4
 Release: 1%{dist}
 License: LGPL
 Group: Development/Languages
@@ -103,6 +107,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING README RELEASE-NOTES ChangeLog AUTHORS test/ docs/
 
 %changelog
+* Wed May 8 2010 David Nichols <david_nichols@users.sourceforge.net>
+- updated version to 1.0.4
+
 * Wed Aug 26 2009 David Nichols <david_nichols@users.sourceforge.net>
 - updated version to 1.0.3
 

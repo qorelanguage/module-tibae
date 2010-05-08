@@ -133,7 +133,11 @@ class AbstractQoreNode *map_mdata_to_node(MData *md, ExceptionSink *xsink)
    
    const MDateTime *mdt;
    if ((mdt = MDateTime::downCast(md)))
+#ifdef _QORE_HAS_TIME_ZONES
+      return DateTimeNode::makeAbsolute(currentTZ(), mdt->getYear(), mdt->getMonth(), mdt->getDay(), mdt->getHour(), mdt->getMinute(), mdt->getSecond(), mdt->getMicroSeconds());
+#else
       return new DateTimeNode(mdt->getYear(), mdt->getMonth(), mdt->getDay(), mdt->getHour(), mdt->getMinute(), mdt->getSecond(), mdt->getMicroSeconds() / 1000);
+#endif
    
    const MDate *mdate;
    if ((mdate = MDate::downCast(md)))
@@ -146,7 +150,7 @@ class AbstractQoreNode *map_mdata_to_node(MData *md, ExceptionSink *xsink)
    const MBinary *mbin;
    if ((mbin = MBinary::downCast(md)))
    {
-      BinaryNode *b = new BinaryNode();
+      BinaryNode *b = new BinaryNode;
       b->append(mbin->getData(), mbin->size());
       return b;
    }
@@ -157,7 +161,11 @@ class AbstractQoreNode *map_mdata_to_node(MData *md, ExceptionSink *xsink)
 
    const MTime *mtime;
    if ((mtime = MTime::downCast(md)))
-      return new DateTimeNode(0, 0, 0, mtime->getHour(), mtime->getMinute(), mtime->getSecond(), mtime->getMicroSeconds() / 1000);
+#ifdef _QORE_HAS_TIME_ZONES
+      return DateTimeNode::makeAbsoluteLocal(currentTZ(), mtime->getHour() * 3600 + mtime->getMinute() * 60 + mtime->getSecond(), mtime->getMicroSeconds());      
+#else
+      return new DateTimeNode(1970, 1, 1, mtime->getHour(), mtime->getMinute(), mtime->getSecond(), mtime->getMicroSeconds() / 1000);
+#endif
 
    xsink->raiseException("MAP-ERROR", "can't map MData element of class '%s' to QORE type", md->getClassName());
    return NULL;

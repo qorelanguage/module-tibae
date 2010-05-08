@@ -131,19 +131,19 @@ const MBaseClassDescription *QoreApp::find_class(const char *cn, ExceptionSink *
 }
 
 DLLLOCAL MDateTime *get_mdatetime(const DateTime *d) {
+#ifdef _QORE_HAS_TIME_ZONES
+   // we can't use the DateTime::getEpochSeconds() because 
+   // that gives seconds in local time and we need UTC
+   MDateTimeStruct mdts;
+   mdts.setTime_t(d->getEpochSecondsUTC());
+   mdts.setMicroSeconds(d->getMicrosecond());
+   return new MDateTime(mdts);
+#else
    // we have to use a string here in case the date is too large for a time_t value
    QoreString str;
    str.sprintf("%04d-%02d-%02dT%02d:%02d:%02d.%03d", d->getYear(), d->getMonth(), d->getDay(), 
 	       d->getHour(), d->getMinute(), d->getSecond(), d->getMillisecond());
    return new MDateTime(str.getBuffer());
-
-#if 0
-   // we can't use the DateTime::getEpochSeconds() because that gives seconds in GMT
-   // and we need local time!
-   MDateTimeStruct mdts;
-   mdts.setTime_t(d.getEpochSeconds());
-   mdts.setMicroSeconds(d.getMillisecond() * 1000);
-   return new MDateTime(mdts);
 #endif
 }
 
@@ -190,7 +190,13 @@ MData *QoreApp::do_type(int type_code, const AbstractQoreNode *v, ExceptionSink 
 
       case TIBAE_DATE: {
 	 DateTimeValueHelper d(v);
+#ifdef _QORE_HAS_TIME_ZONES
+	 qore_tm info;
+	 d->getInfo(info);
+	 return new MDate(info.year, info.month, info.day);
+#else
          return new MDate(d->getYear(), d->getMonth(), d->getDay());
+#endif
       }
 
       case TIBAE_STRING: {
@@ -229,10 +235,17 @@ MData *QoreApp::do_type(int type_code, const AbstractQoreNode *v, ExceptionSink 
 
       case TIBAE_TIME: {
 	 DateTimeValueHelper d(v);
+#ifdef _QORE_HAS_TIME_ZONES
+	 qore_tm info;
+	 d->getInfo(info);
+	 float seconds = (float)info.second + (float)info.us / (float)1000000.0; 
+	 MTime *mt = new MTime(info.hour, info.minute, seconds);
+#else
 	 float seconds = (float)d->getSecond() + ((float)d->getMillisecond()) / (float)1000.0; 
-
+	 MTime *mt = new MTime(d->getHour(), d->getMinute(), seconds);
+#endif
 	 try {
-	    return new MTime(d->getHour(), d->getMinute(), seconds);
+	    return mt;
 	 }
 	 catch (MException &tib_e) {
 	    xsink->raiseException("TIBCO-EXCEPTION", "%s, %s", tib_e.getType().c_str(), tib_e.getDescription().c_str());
@@ -354,8 +367,15 @@ lass '%s'", pcd->getFullName().c_str(), cn);
       const char *type = pcd->getShortName().c_str();
       if (!strcmp(type, "dateTime") || !strcmp(type, "any"))
 	 return get_mdatetime(date);
-      else if (!strcmp(type, "date"))
+      else if (!strcmp(type, "date")) {
+#ifdef _QORE_HAS_TIME_ZONES
+	 qore_tm info;
+	 date->getInfo(info);
+	 return new MDate(info.year, info.month, info.day);
+#else
 	 return new MDate(date->getYear(), date->getMonth(), date->getDay());
+#endif
+      }
 	 
       xsink->raiseException("TIBCO-DATE-INSTANTIATION-ERROR", "cannot map from QORE type 'date' to TIBCO type '%s'",
 			    pcd->getShortName().c_str());
