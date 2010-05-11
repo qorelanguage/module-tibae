@@ -7,11 +7,9 @@ endif
 lib_LTLIBRARIES = tibae.la
 tibae_la_SOURCES = $(TIBAE_SOURCES)
 tibae_la_LDFLAGS = -module -avoid-version $(TIBAE_LDFLAGS) ${TIBRV_LDFLAGS}
-tibae_la_CPPFLAGS = $(TIBAE_CPPFLAGS) $(TIBRV_CPPFLAGS)
+tibae_la_CPPFLAGS = $(TIBAE_CPPFLAGS) $(TIBRV_CPPFLAGS) ${QORE_CPPFLAGS}
 
 INCLUDES = -I$(top_srcdir)/include
-
-AM_CPPFLAGS = ${QORE_CPPFLAGS}
 
 if COND_PROFILE
 AM_CXXFLAGS=-g -pg
