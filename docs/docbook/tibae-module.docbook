@@ -102,7 +102,7 @@
 	  </row>
 	  <row>
 	    <entry><para><code>DateTime</code></para></entry>
-	    <entry><para>absolute <code>Type::Date</code>; note that microseconds are converted to milliseconds, so some precision may be lost</para></entry>
+	    <entry><para>absolute <code>Type::Date</code>; when compiled with qore 0.8.0+, microsecond resolution is maintained</para></entry>
 	  </row>
 	  <row>
 	    <entry><para><code>Date</code></para></entry>
@@ -110,7 +110,7 @@
 	  </row>
 	  <row>
 	    <entry><para><code>Time</code></para></entry>
-	    <entry><para>absolute <code>Type::Date</code>; the date portion is set to 1970-01-01, and please note that microseconds are converted to milliseconds, so some precision may be lost</para></entry>
+	    <entry><para>absolute <code>Type::Date</code>; the date portion is set to 1970-01-01; when compiled with qore 0.8.0+, microsecond resolution is maintained</para></entry>
 	  </row>
 	  <row>
 	    <entry><para><code>Interval</code></para></entry>
