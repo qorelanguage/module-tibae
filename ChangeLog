@@ -1,3 +1,58 @@
+2010-06-14 14:05  david_nichols
+
+	* docs/tibae-module-doc.html: updated docs for new release
+
+2010-06-14 14:04  david_nichols
+
+	* docs/docbook/get-docbook-root.sh: added missing file
+
+2010-06-10 14:22  david_nichols
+
+	* docs/docbook/Makefile, docs/docbook/tibae-module.docbook,
+	  docs/qore-style.css, docs/tibae-module-doc.html: updated docs for
+	  new release
+
+2010-05-12 11:49  david_nichols
+
+	* configure.ac: solaris and sun studio compile and warning
+	  fixes/enhancements
+
+2010-05-11 14:44  david_nichols
+
+	* src/Makefile.am: compile fixes for solaris
+
+2010-05-08 17:26  david_nichols
+
+	* RELEASE-NOTES, src/tibae.cc: updated conversions to use more
+	  efficient APIs; updated release notes
+
+2010-05-08 16:57  david_nichols
+
+	* RELEASE-NOTES, configure.ac, qore-tibae-module.spec,
+	  src/QoreApp.cc, src/tibae-module.cc, src/tibae.cc: updated to new
+	  date/time APIs in qore 0.8.0; updated release to 1.0.4
+
+2009-12-09 12:58  david_nichols
+
+	* configure.ac: fixed all modules to use decimal comparisons with
+	  the qore version string instead of octal so that they will still
+	  compile with qore v0.8.0 and up...
+
+2009-11-22 06:03  david_nichols
+
+	* configure.ac: updated configure to assume 64-bit build if
+	  host_cpu = "amd64"
+
+2009-10-30 08:22  david_nichols
+
+	* configure.ac: updated all module configure scripts to use gnutar
+	  on darwin to avoid picking up OSX resource files in source
+	  releases
+
+2009-10-05 08:53  david_nichols
+
+	* ChangeLog: udpated changelog
+
 2009-09-21 11:07  david_nichols
 
 	* configure.ac: updated module configure scripts to select 64-bit
