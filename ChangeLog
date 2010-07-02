@@ -1,3 +1,13 @@
+2010-06-21 09:12  david_nichols
+
+	* qore-tibae-module.spec: updated spec files to generically
+	  determine *suse versions for distribution tagging in rpm file
+	  names
+
+2010-06-20 06:03  david_nichols
+
+	* ChangeLog: fixed ChangeLogs with non-broken svn2cl
+
 2010-06-14 14:05  david_nichols
 
 	* docs/tibae-module-doc.html: updated docs for new release
