@@ -50,7 +50,6 @@ static const char *get_class(const QoreHashNode *h) {
 
 QoreApp::QoreApp(MAppProperties *pMAP, const char *name, QoreHashNode *clh,
 		 const char *svc, const char *net, const char *dmn, const char *sbj) : MApp(pMAP) {
-   appProps = pMAP;
    session_name = strdup(name ? name : "");
    rcv_subject = 0;
    service = strdup(svc ? svc : "");
@@ -91,8 +90,6 @@ QoreApp::~QoreApp() {
    free(subject);
    if (classlist)
       classlist->deref(0);
-   
-   delete appProps;
 }
 
 void QoreApp::deref(ExceptionSink *xsink) {
@@ -107,8 +104,8 @@ void QoreApp::deref(ExceptionSink *xsink) {
          //printd(5, "QoreApp::deref() %08p: returned from delete\n", this);
       }
       catch (MException &te) {
-         //xsink->raiseException("TIBCO-EXCEPTION", "Exception caught in TibcoAdapter::destructor(): %s: %s",
-         //te.getType().c_str(), te.getDescription().c_str());
+         printd(0, "TIBCO-EXCEPTION: Exception caught in TibcoAdapter::destructor(): %s: %s", te.getType().c_str(), te.getDescription().c_str());
+         //xsink->raiseException("TIBCO-EXCEPTION", "Exception caught in TibcoAdapter::destructor(): %s: %s", te.getType().c_str(), te.getDescription().c_str());
       }
    }
 }

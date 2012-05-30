@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 # AC_PREREQ(2.59)
-AC_INIT([qore-tibae-module], [1.0.4],
+AC_INIT([qore-tibae-module], [1.0.5],
         [David Nichols <david@qore.org>],
         [qore-tibae-module])
 AM_INIT_AUTOMAKE
@@ -99,6 +99,59 @@ case "${host_os}" in
 		AC_DEFINE(HPUX, 1, if compiling on HP-UX)
 		AC_DEFINE(NEED_ENVIRON_LOCK, 1, [if the environment operations need explicit locking])
 		;;
+     *cygwin*)  SHLIB_SUFFIX=dll
+                CPPFLAGS=-mwin32
+                windows=yes
+                # turn off signal handling for cygwin; cygwin supports it, but it's emulated/slow/non-native
+                no_sig_handling=yes
+                ;;
+     *mingw32*) SHLIB_SUFFIX=dll
+                windows=yes
+                mingw=yes
+                need_user_dl=yes # set to make sure there's a user-provided dlfcn.h and libdl.(a|dll) available
+                # DEBUG
+                #make_dll=no
+                # libraries to find
+                need_libs="$need_libs wsock32 ws2_32 gdi32 iconv pthread"
+                # DEBUG: cannot create dll without these libraries for some reason
+                #need_libs="$need_libs user32 gdi32 iberty msvcrt advapi32 mingwex moldname kernel32"
+                # turn off signal handling for windows
+                no_sig_handling=yes
+                # have to set _WIN32_WINNT level so that some networking APIs are available
+                CPPFLAGS="$CPPFLAGS -D_WIN32_WINNT=0x0501"
+                # have to set a flag when building the library so symbols are exported correctly
+                QORE_LIB_CPPFLAGS="-DBUILDING_DLL=1"
+                # make sure OS is set to Windows when cross-compiling
+                OS=Windows
+                # set LIB_PREFIX if not already set
+                if test -z "$LIB_PREFIX"; then
+                   AC_MSG_CHECKING([for mingw32 library prefix])
+                   cc_loc=`which $CXX|head -1`
+                   mingw_base=`dirname $cc_loc|sed 's/\/@<:@^/@:>@*$//'`
+                   cc_targ=`echo $CXX|sed s/-g++$//`
+                   if test -d $mingw_base/$cc_targ; then
+                      LIB_PREFIX=$mingw_base/$cc_targ
+                      AC_MSG_RESULT([$LIB_PREFIX])
+                   else
+                      AC_MSG_RESULT([not found])
+                   fi
+                fi
+                # need a native g++ compiler for native targets (ie qpp)
+                if test -z "$NATIVE_CXX"; then
+                   NATIVE_CXX=`which g++|head -1 2>/dev/null`
+                   if test -z "$NATIVE_CXX"; then
+                      AC_MSG_ERROR(unable to find a native c++ compiler; please set NATIVE_CXX to the path to the native c++ compiler for building qpp)
+                   fi
+                fi
+                if test -z "$NATIVE_CXX"; then
+                   NATIVE_CXX=$CXX
+                fi
+                AC_SUBST(NATIVE_CXX)
+                AC_SUBST(NATIVE_CPPFLAGS)
+                AC_SUBST(NATIVE_LDDFLAGS)
+                ;;
+     *)         AC_WARN(Unknown platform ${host_os})
+                ;;
 esac
 AC_SUBST(SHLIB_SUFFIX)
 if test -z "$MODULE_SUFFIX" ; then
@@ -246,6 +299,13 @@ AC_ARG_ENABLE([single-compilation-unit],
        *)      AC_MSG_ERROR(bad value ${enable_single_compilation_unit} for --enable-single-compilation-unit) ;;
       esac],
   [enable_single_compilation_unit=yes])
+
+# allow the user to set a generic search prefix for libraries, includes, etc
+AC_ARG_WITH([lib-prefix],
+  [AS_HELP_STRING([--with-lib-prefix@<:@=DIR@:>@],
+                  [generic search prefix for libraries, includes, etc])],
+  [if test ! -d "${with_lib_prefix}"; then AC_MSG_ERROR([bad value ${with_lib_prefix} for --with-lib-prefix]); unset with_lib_prefix; fi],
+  [with_lib_prefix="$LIB_PREFIX"])
 
 AC_ARG_WITH([tibrv],
   [AS_HELP_STRING([--with-tibrv@<:@=DIR@:>@],
@@ -543,7 +603,7 @@ AC_ARG_WITH([qore-dir],
   [with_qore_dir="$QORE_DIR"])
 
 AC_MSG_CHECKING([for qore libraries and header files])
-for dir in "${with_qore_dir}" "${find_prefix}" /usr / /usr/local /opt/gnu /opt/qore /usr/local/qore /opt/local /sw /usr/sfw /opt/sfw; do
+for dir in "${with_qore_dir}" "${with_lib_prefix}" "${find_prefix}" /usr / /usr/local /opt/gnu /opt/qore /usr/local/qore /opt/local /sw /usr/sfw /opt/sfw; do
     find_qore $dir
     if test -n "$QORE_LDFLAGS"; then
         break
@@ -653,9 +713,8 @@ if test "$GXX" = "yes"; then
    if test "$gcc_version" \> "4"; then
       AC_DEFINE(HAVE_GCC_VISIBILITY, 1, if compiling with g++ and visibility support is available)
       AC_MSG_RESULT([yes, $CXX $gcc_version])
-      # we no longer set visibility to hidden by default because it makes RTTI symbols invisible
-      # all functions in the library are tagged anyway
-      #CXXFLAGS="$CXXFLAGS -fvisibility=hidden"
+      # turn off strict aliasing for g++
+      CXXFLAGS="$CXXFLAGS -fno-strict-aliasing"
    else
       AC_MSG_RESULT([no, gcc $gcc_version])
    fi

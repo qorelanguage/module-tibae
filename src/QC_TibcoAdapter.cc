@@ -3,7 +3,7 @@
 
   TIBCO Active Enterprise integration to QORE
 
-  Copyright 2003 - 2008 David Nichols
+  Copyright 2003 - 2012 David Nichols
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -82,10 +82,10 @@ void TIBAE_constructor(QoreObject *self, const QoreListNode *params, ExceptionSi
 	  daemon  ? daemon  : "(null)");
    QoreApp *myQoreApp = NULL;
 
-   MAppProperties *appProps = new MAppProperties();
+   std::auto_ptr<MAppProperties> appProps(new MAppProperties);
 
    TibCommandLine tcl;
-   set_properties(appProps, p1, tcl, xsink); 
+   set_properties(appProps.get(), p1, tcl, xsink); 
 
    if (*xsink)
       return;
@@ -93,7 +93,7 @@ void TIBAE_constructor(QoreObject *self, const QoreListNode *params, ExceptionSi
    try {
       //printd(5, "before QoreApp constructor\n");
       myQoreApp =
-         new QoreApp(appProps, session_name, classlist.release(), service, network, daemon);
+         new QoreApp(appProps.get(), session_name, classlist.release(), service, network, daemon);
 
       //printd(5, "after QoreApp constructor (%08p)\n", myQoreApp);
 
@@ -111,7 +111,6 @@ void TIBAE_constructor(QoreObject *self, const QoreListNode *params, ExceptionSi
    }
    self->setPrivate(CID_TIBAE, myQoreApp);
    printd(5, "TIBAE_constructor() this=%08p myQoreApp=%08p\n", self, myQoreApp);
-
 }
 
 void TIBAE_copy(QoreObject *self, QoreObject *old, QoreApp *myQoreApp, class ExceptionSink *xsink) {
@@ -126,8 +125,7 @@ static AbstractQoreNode *TIBAE_sendSubject(QoreObject *self, QoreApp *myQoreApp,
    // check input parameters
    if (!(p0 = test_string_param(params, 0)) ||
        !(p1 = test_string_param(params, 1)) ||
-       is_nothing((p2 = get_param(params, 2))))
-   {
+       is_nothing((p2 = get_param(params, 2)))) {
       xsink->raiseException("TIBCO-SENDSUBJECT-PARAMETER-ERROR", "invalid parameters passed to TibcoAdapter::sendSubject(), expecting subject (string), function name (string), message (hash)");
       return NULL;
    }
@@ -287,6 +285,7 @@ static AbstractQoreNode* TIBAE_operationsOneWayCall(QoreObject* self, QoreApp* m
    return 0;
 }
 
+#if 0
 // The same parameters as for TIBAE_operationsCallWithSyncResult (including timeout).
 // Always return 0. To get the reply use combination of class name + method name passed to this call.
 static AbstractQoreNode* TIBAE_operationsAsyncCall(QoreObject* self, QoreApp* myQoreApp, const QoreListNode *params, ExceptionSink *xsink) {
@@ -354,6 +353,7 @@ static AbstractQoreNode* TIBAE_operationsGetAsyncCallResult(QoreObject* self, Qo
 
    return myQoreApp->operationsGetAsyncCallResult(class_name_extracted, method_name_extracted, xsink);
 }
+#endif
 
 QoreClass *initTibcoAdapterClass() {
    QORE_TRACE("initTibcoAdapterClass()");
@@ -371,11 +371,11 @@ QoreClass *initTibcoAdapterClass() {
    QC_TIBAE->addMethod("callOperationWithSyncReply",  (q_method_t)TIBAE_operationsCallWithSyncResult);
    QC_TIBAE->addMethod("callOperationOneWay",         (q_method_t)TIBAE_operationsOneWayCall);
 
-   /*
-   // commented out for now as the retrieving async call method still fails
+#if 0
+   // disabled for now as the retrieving async call method still fails
    QC_TIBAE->addMethod("callOperationAsync",          (q_method_t)TIBAE_operationsAsyncCall);
    QC_TIBAE->addMethod("getAsyncOperationCallResult", (q_method_t)TIBAE_operationsGetAsyncCallResult);
-   */
+#endif
 
    return QC_TIBAE;
 }

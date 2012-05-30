@@ -28,8 +28,7 @@
 
 #include <memory>
 
-static inline class AbstractQoreNode *map_minstance_to_node(const MInstance *min, ExceptionSink *xsink)
-{
+static inline class AbstractQoreNode *map_minstance_to_node(const MInstance *min, ExceptionSink *xsink) {
    std::auto_ptr<MEnumerator<MString, MData *> >me(min->newEnumerator());   
    MString name;
    MData *val;
@@ -45,8 +44,7 @@ static inline class AbstractQoreNode *map_minstance_to_node(const MInstance *min
 }
 
 // maps a TIBCO sequence to a QORE list
-static inline class AbstractQoreNode *map_msequence_to_node(const MSequence *ms, ExceptionSink *xsink)
-{
+static inline class AbstractQoreNode *map_msequence_to_node(const MSequence *ms, ExceptionSink *xsink) {
    ReferenceHolder<QoreListNode> rv(new QoreListNode(), xsink);
 
    for (unsigned i = 0; i < ms->size() && !xsink->isEvent(); i++)
@@ -61,8 +59,7 @@ static inline class AbstractQoreNode *map_msequence_to_node(const MSequence *ms,
 typedef MEnumerator<MString, MData *> ma_enumerator_t;
 
 // maps a TIBCO associative list to a QORE hash
-static inline class AbstractQoreNode *map_massoclist_to_node(const MAssocList *mal, ExceptionSink *xsink)
-{
+static inline class AbstractQoreNode *map_massoclist_to_node(const MAssocList *mal, ExceptionSink *xsink) {
    ReferenceHolder<QoreHashNode> h(new QoreHashNode(), xsink);
 
    std::auto_ptr<ma_enumerator_t> me(mal->newEnumerator());
@@ -79,8 +76,7 @@ static inline class AbstractQoreNode *map_massoclist_to_node(const MAssocList *m
 }
 
 // maps a TIBCO union to a QORE hash
-static inline class AbstractQoreNode *map_munion_to_node(const MUnion *mu, ExceptionSink *xsink)
-{
+static inline class AbstractQoreNode *map_munion_to_node(const MUnion *mu, ExceptionSink *xsink) {
    ReferenceHolder<QoreHashNode> h(new QoreHashNode(), xsink);
 
    MString MSkey = mu->getMemberName();
@@ -93,8 +89,7 @@ static inline class AbstractQoreNode *map_munion_to_node(const MUnion *mu, Excep
 }
 
 // maps a TIBCO MTree to a QORE node
-class AbstractQoreNode *map_mdata_to_node(MData *md, ExceptionSink *xsink)
-{
+AbstractQoreNode *map_mdata_to_node(MData *md, ExceptionSink *xsink) {
    const MInstance *min;
 
    // is it an MInstance?
@@ -121,8 +116,7 @@ class AbstractQoreNode *map_mdata_to_node(MData *md, ExceptionSink *xsink)
       return new QoreBigIntNode(mi->getMi8());
    
    const MStringData *msd;
-   if ((msd = MStringData::downCast(md)))
-   {
+   if ((msd = MStringData::downCast(md))) {
       MString ms = msd->getAsString();
       return new QoreStringNode((char *)ms.c_str());
    }
@@ -148,8 +142,7 @@ class AbstractQoreNode *map_mdata_to_node(MData *md, ExceptionSink *xsink)
       return get_bool_node((bool)mb->getAsBoolean());
 
    const MBinary *mbin;
-   if ((mbin = MBinary::downCast(md)))
-   {
+   if ((mbin = MBinary::downCast(md))) {
       BinaryNode *b = new BinaryNode;
       b->append(mbin->getData(), mbin->size());
       return b;
@@ -171,25 +164,21 @@ class AbstractQoreNode *map_mdata_to_node(MData *md, ExceptionSink *xsink)
    return NULL;
 }
 
-void set_properties(MAppProperties *appProperties, const QoreHashNode *h, TibCommandLine &tcl, ExceptionSink *xsink)
-{
+void set_properties(MAppProperties *appProperties, const QoreHashNode *h, TibCommandLine &tcl, ExceptionSink *xsink) {
    QORE_TRACE("set_properties()");
 
    // variable hash for overridding global variables
    const QoreHashNode *vh = NULL;
 
    ConstHashIterator hi(h);
-   while (hi.next())
-   {
+   while (hi.next()) {
       const char *key = hi.getKey();
-      if (!hi.getValue())
-      {
+      if (!hi.getValue()) {
 	 xsink->raiseException("TIBCO-INVALID-PROPERTIES-HASH", "properties hash key '%s' has value = NOTHING",	key);
 	 return;
       }
 
-      if (!strcmp(key, "Vars"))
-      {
+      if (!strcmp(key, "Vars")) {
 	 vh = dynamic_cast<const QoreHashNode *>(hi.getValue());
 	 if (vh)
 	    continue;
@@ -197,8 +186,7 @@ void set_properties(MAppProperties *appProperties, const QoreHashNode *h, TibCom
 
       const AbstractQoreNode *v = hi.getValue();
       const QoreStringNode *str = dynamic_cast<const QoreStringNode *>(v);
-      if (!str)
-      {
+      if (!str) {
 	 xsink->raiseException("TIBCO-INVALID-PROPERTIES-HASH",
 			       "properties hash has invalid type '%s' for key '%s' (must be string)",
 			       v ? v->getTypeName() : "NOTHING", key);
@@ -221,11 +209,9 @@ void set_properties(MAppProperties *appProperties, const QoreHashNode *h, TibCom
 #endif
    }
 
-   if (vh)
-   {
+   if (vh) {
       ConstHashIterator vhi(vh);
-      while (vhi.next())
-      {
+      while (vhi.next()) {
 	 const char *key = vhi.getKey();
 	 if (!key || !key[0])
 	    continue;
@@ -245,6 +231,4 @@ void set_properties(MAppProperties *appProperties, const QoreHashNode *h, TibCom
    appProperties->setMultiThreaded(); 
    //appProperties->setDefaultStringEncoding(MEncoding::M_ASCII);
    //appProperties->setDefaultStringEncoding(MEncoding::M_LATIN_1);
-
-
 }
