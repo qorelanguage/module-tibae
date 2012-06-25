@@ -541,8 +541,7 @@ else
    with_tibae=yes
 fi
 
-set_qore_cppflags()
-{
+set_qore_cppflags() {
     QORE_INC_DIR=$1
     if test "$1" != "/usr/include"; then
         QORE_CPPFLAGS=-I$1
@@ -550,7 +549,11 @@ set_qore_cppflags()
 }
 
 find_qore() {
-    lib=$1/lib${LIBSUFFIX}
+    a="$1"
+    if test \( "$a" = "/" -o -z "$a" \) -a -h "$a/lib${LIBSUFFIX}"; then
+        a=/usr
+    fi
+    lib=$a/lib${LIBSUFFIX}
 
     # if we only want the static qore libraries
     if test -n "$qore_static"; then
@@ -579,10 +582,10 @@ find_qore() {
 
     AC_MSG_CHECKING([for qore include files])
     # try to find include files
-    if test "$1" = "/"; then
+    if test "$a" = "/"; then
         inc=/usr/include
     else
-        inc=$1/include
+        inc=$a/include
     fi
     if test -f "$inc/qore/Qore.h"; then
         AC_MSG_RESULT([found: $inc])
@@ -800,8 +803,7 @@ else
    printf " (32-bit)\n"
 fi
 
-show_library_feature()
-{
+show_library_feature() {
    printf "%-24s: " "$1"
    if test "$2" = "yes"; then
       printf "%-8s" yes
