@@ -507,6 +507,15 @@ case "$TIBCO_SDK_VERSION" in
                TIBAE_CPPFLAGS="-I${with_tibae}/include -I${with_tibae}/include/xercesc -I${with_tibco_ems}/clients/c/include"
                AC_DEFINE(TIBCO_SDK, 5, [define for TIBCO SDK 5.*])
                ;;
+        5.8.*) if test -z "${with_tibco_ems}"; then AC_MSG_ERROR([SDK 5.8 requires TIBCO EMS, but TIBCO EMS was not found]); fi
+	       if test "$enable_64bit" = "yes"; then
+	          TIBAE_LDFLAGS="-L${with_tibae}/lib -L${with_tibae}/lib/64 -L${with_tibae_tpcl}/lib -L${with_tibae_tpcl}/lib/64 -lmaverick58${LIBSUFFIX} -ltibrv${LIBSUFFIX} -ltibrvcm${LIBSUFFIX} -ltibrvcmq${LIBSUFFIX} -ltibrvft${LIBSUFFIX} -ldl -lrepowww580${LIBSUFFIX} -lxerces-c2_8 -lssl -lcrypto -licuuc -lpthread"
+	       else
+	          TIBAE_LDFLAGS="-L${with_tibae}/lib -L${with_tibae_tpcl}/lib -lmaverick58${LIBSUFFIX}  -ltibrv${LIBSUFFIX} -ltibrvcm${LIBSUFFIX} -ltibrvcmq${LIBSUFFIX} -ltibrvft${LIBSUFFIX} -ldl -lrepowww580${LIBSUFFIX} -lxerces-c2_8 -lssl -lcrypto -licuuc -lpthread"
+	       fi
+               TIBAE_CPPFLAGS="-I${with_tibae}/include -I${with_tibae}/include/xercesc -I${with_tibco_ems}/clients/c/include -DLINUX24"
+               AC_DEFINE(TIBCO_SDK, 5, [define for TIBCO SDK 5.*])
+               ;;
 	*)     AC_MSG_ERROR(Unsupported TIBCO SDK Version) 
 	       ;;
 esac
