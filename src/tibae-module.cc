@@ -42,7 +42,7 @@ DLLEXPORT qore_license_t qore_module_license = QL_LGPL;
 
 static AbstractQoreNode *f_tibae_type(const QoreListNode *params, ExceptionSink *xsink) {
    const AbstractQoreNode *p = get_param(params, 0);
-   int type = p->getAsInt();
+   int type = p ? p->getAsInt() : 0;
    if (type < 1 || type > MAX_TIBAE_TYPE) {
       xsink->raiseException("TIBAE-TYPE-ERROR", "type %d is out of range (expecting 1 - %d)", type, MAX_TIBAE_TYPE);
       return 0;
