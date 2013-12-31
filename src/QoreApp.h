@@ -80,10 +80,10 @@ public:
    DLLLOCAL QoreApp(MAppProperties *pMAP, const char* name, QoreHashNode* clh, 
 		    const char* svc = NULL, const char* net = NULL, 
 		    const char* dmn = NULL, const char* sbj = NULL);
-   DLLLOCAL AbstractQoreNode* sendWithSyncReply(const char* function_name, const AbstractQoreNode* value, int timeout, ExceptionSink *xsink);
-   DLLLOCAL AbstractQoreNode* sendWithSyncReply(const char* subject, const char* function_name, const AbstractQoreNode* value, int timeout, ExceptionSink *xsink);
-   DLLLOCAL void send(const char* function_name, const AbstractQoreNode* value, ExceptionSink *xsink);
-   DLLLOCAL void send(const char* subject, const char* function_name, const AbstractQoreNode* value, ExceptionSink *xsink);
+   DLLLOCAL AbstractQoreNode* sendWithSyncReply(ExceptionSink *xsink, const char* function_name, const AbstractQoreNode* value, int timeout, const char* tracking_info = 0);
+   DLLLOCAL AbstractQoreNode* sendWithSyncReply(ExceptionSink *xsink, const char* subject, const char* function_name, const AbstractQoreNode* value, int timeout, const char* tracking_info = 0);
+   DLLLOCAL void send(ExceptionSink *xsink, const char* function_name, const AbstractQoreNode* value, const char* tracking_info = 0);
+   DLLLOCAL void send(ExceptionSink *xsink, const char* subject, const char* function_name, const AbstractQoreNode* value, const char* tracking_info = 0);
    DLLLOCAL QoreHashNode* receive(const char* subject, unsigned long timeout, ExceptionSink *xsink);
    DLLLOCAL void set_subject_name(const char* sub);
    DLLLOCAL const char* get_subject() { return subject; }

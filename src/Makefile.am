@@ -1,7 +1,17 @@
+MNAME=tibae
+
+.qpp.cpp:
+	qpp $<
+
+GENERATED_SRC = ql_tibae.cpp
+CLEANFILES = $(GENERATED_SRC)
+
 if COND_SINGLE_COMPILATION_UNIT
+single-compilation-unit.cc: $(GENERATED_SRC)
 TIBAE_SOURCES = single-compilation-unit.cc
 else
 TIBAE_SOURCES = QoreApp.cc QC_TibcoAdapter.cc TibCommandLine.cc tibae.cc tibae-module.cc 
+nodist_ssh2_la_SOURCES = $(GENERATED_SRC)
 endif
 
 lib_LTLIBRARIES = tibae.la
@@ -20,6 +30,5 @@ endif
 endif
 
 install-exec-hook:
-	mv $(DESTDIR)$(libdir)/tibae.$(MODULE_SUFFIX) $(DESTDIR)$(libdir)/tibae-api-$(MODULE_API).qmod
-	rm -f $(DESTDIR)$(libdir)/tibae.la
-
+	mv $(DESTDIR)$(libdir)/$(MNAME).$(MODULE_SUFFIX) $(DESTDIR)$(libdir)/$(MNAME)-api-$(MODULE_API).qmod
+	$(RM) $(DESTDIR)$(libdir)/$(MNAME).la $(RM_OTHER)

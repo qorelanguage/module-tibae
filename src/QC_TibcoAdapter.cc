@@ -118,7 +118,7 @@ void TIBAE_copy(QoreObject *self, QoreObject *old, QoreApp *myQoreApp, class Exc
 }
 
 // usage: TIBAE_sendSubject(subject, function_name, message)
-static AbstractQoreNode *TIBAE_sendSubject(QoreObject *self, QoreApp *myQoreApp, const QoreListNode *params, class ExceptionSink *xsink) {
+static AbstractQoreNode *TIBAE_sendSubject(QoreObject *self, QoreApp *myQoreApp, const QoreListNode *params, ExceptionSink *xsink) {
    const QoreStringNode *p0, *p1;
    const AbstractQoreNode *p2;
 
@@ -133,9 +133,11 @@ static AbstractQoreNode *TIBAE_sendSubject(QoreObject *self, QoreApp *myQoreApp,
    const char *subject = p0->getBuffer();
    const char *fname = p1->getBuffer();
 
+   const QoreStringNode* tracking_info = test_string_param(params, 3);
+
    // try to send message
    try {
-      myQoreApp->send(subject, fname, p2, xsink);
+      myQoreApp->send(xsink, subject, fname, p2, tracking_info ? tracking_info->getBuffer() : 0);
    }
    catch(MException &te) {
       xsink->raiseException("TIBCO-EXCEPTION", 
@@ -165,10 +167,12 @@ static AbstractQoreNode *TIBAE_sendSubjectWithSyncReply(QoreObject *self, QoreAp
    if ((p3 = get_param(params, 3)))
       timeout = getMsZeroInt(p3);
 
+   const QoreStringNode* tracking_info = test_string_param(params, 4);
+
    // try to send message
    try {
       printd(2, "TIBAE_sendSubjectWithSyncReply() calling sendWithSyncReply()\n");
-      return myQoreApp->sendWithSyncReply(p0->getBuffer(), fname, p2, timeout, xsink);
+      return myQoreApp->sendWithSyncReply(xsink, p0->getBuffer(), fname, p2, timeout, tracking_info ? tracking_info->getBuffer() : 0);
    }
    catch(MException &te) {
       xsink->raiseException("TIBCO-EXCEPTION", 

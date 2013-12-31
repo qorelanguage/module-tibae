@@ -1,0 +1,96 @@
+/* -*- mode: c++; indent-tabs-mode: nil -*- */
+/*
+    ql_tibae.qpp
+    
+    Qore Programming Language
+
+    Copyright 2003 - 2013 David Nichols
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+#include <qore/Qore.h>
+#include "tibae.h"
+
+/** @defgroup tibae_type_constants Tibco Active Enterprise Adapter Module Type Constants
+ */
+//@{
+//! use the binary data type
+const TIBAE_BINARY = TIBAE_BINARY;
+//! use the boolean data type
+const TIBAE_BOOLEAN = TIBAE_BOOLEAN;
+//! use the byte data type
+const TIBAE_BYTE = TIBAE_BYTE;
+//! use the char data type
+const TIBAE_CHAR = TIBAE_CHAR;
+//! use the date data type
+const TIBAE_DATE = TIBAE_DATE;
+//! use the date/time data type
+const TIBAE_DATETIME = TIBAE_DATETIME;
+//! use the fixed data type
+const TIBAE_FIXED = TIBAE_FIXED;
+//! use the signed 1 byte integer data type
+const TIBAE_I1 = TIBAE_I1;
+//! use the signed 2 byte integer data type
+const TIBAE_I2 = TIBAE_I2;
+//! use the signed 4 byte integer data type
+const TIBAE_I4 = TIBAE_I4;
+//! use the signed 8 byte integer data type
+const TIBAE_I8 = TIBAE_I8;
+//! use the interval data type
+const TIBAE_INTERVAL = TIBAE_INTERVAL;
+//! use the 4 byte floating-point numeric data type
+const TIBAE_R4 = TIBAE_R4;
+//! use the 8 byte floating-point numeric data type
+const TIBAE_R8 = TIBAE_R8;
+//! use the string data type
+const TIBAE_STRING = TIBAE_STRING;
+//! use the time data type
+const TIBAE_TIME = TIBAE_TIME;
+//! use the unsigned 1 byte integer data type
+const TIBAE_U1 = TIBAE_U1;
+//! use the unsigned 4 byte integer data type
+const TIBAE_U2 = TIBAE_U2;
+//! use the unsigned 4 byte integer data type
+const TIBAE_U4 = TIBAE_U4;
+//! use the unsigned 8 byte integer data type
+const TIBAE_U8 = TIBAE_U8;
+//@}
+
+/** @defgroup tibae_functions Tibco Active Enterprise Adapter Module Funtions
+*/
+//@{
+//! Creates a hash structure to ensure that qore data is serialized as a particular Tibae data type as specified by the first argument (valid valus: @ref tibae_type_constants)
+/** @par Example:
+    @code
+my hash $h = tibe_type(TIBAE_INTERVAL, 20D + 10h + 3m);
+    @endcode
+
+    @param type TIBAE module data type code; valid valus: @ref tibae_type_constants
+    @param value the value to use for the given type
+
+    @return a hash structure to ensure that qore data is serialized as a particular Tibae data type
+ */
+hash tibae_type(softint type, any value) [flags=RET_VALUE_ONLY] {
+   if (type < 1 || type > MAX_TIBAE_TYPE) {
+      xsink->raiseException("TIBAE-TYPE-ERROR", "type %d is out of range (expecting 1 - %d)", type, MAX_TIBAE_TYPE);
+      return 0;
+   }
+   QoreHashNode *h = new QoreHashNode;
+   h->setKeyValue("^type^", new QoreBigIntNode(type), xsink);
+   h->setKeyValue("^value^", value ? value->refSelf() : 0, xsink);
+   return h;
+}
+//@}

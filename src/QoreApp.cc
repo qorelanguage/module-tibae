@@ -638,7 +638,7 @@ void QoreApp::onInitialization() throw (MException) {
 #endif
 }
 
-AbstractQoreNode *QoreApp::sendWithSyncReply(const char *function_name, const AbstractQoreNode *value, int timeout, ExceptionSink *xsink)  {
+AbstractQoreNode *QoreApp::sendWithSyncReply(ExceptionSink *xsink, const char *function_name, const AbstractQoreNode *value, int timeout, const char* tracking_info)  {
    std::auto_ptr<MTree> msg(make_MTree(function_name, value, xsink));
    if (*xsink)
       return 0;
@@ -647,7 +647,7 @@ AbstractQoreNode *QoreApp::sendWithSyncReply(const char *function_name, const Ab
    
    // add tracking info
    MTrackingInfo ti;
-   ti.addApplicationInfo("QORE.sendWithSyncReply");
+   ti.addApplicationInfo(tracking_info ? tracking_info : "QORE.sendWithSyncReply");
    msg->setTrackingInfo(ti);
    
    AbstractQoreNode *rv;
@@ -675,7 +675,7 @@ void QoreApp::set_subject_name(const char *sub) {
 }
 
 // this version will create a new publisher and send the message with the subject name passed
-AbstractQoreNode *QoreApp::sendWithSyncReply(const char *subj, const char *function_name, const AbstractQoreNode *value, int timeout, ExceptionSink *xsink) {
+AbstractQoreNode *QoreApp::sendWithSyncReply(ExceptionSink *xsink, const char *subj, const char *function_name, const AbstractQoreNode *value, int timeout, const char* tracking_info) {
    std::auto_ptr<MTree> msg(make_MTree(function_name, value, xsink));
    if (*xsink)
       return 0;
@@ -684,7 +684,7 @@ AbstractQoreNode *QoreApp::sendWithSyncReply(const char *subj, const char *funct
    
    // add tracking info
    MTrackingInfo ti;
-   ti.addApplicationInfo("QORE.sendWithSyncReply");
+   ti.addApplicationInfo(tracking_info ? tracking_info : "QORE.sendWithSyncReply");
    msg->setTrackingInfo(ti);
    
    AbstractQoreNode *rv = 0;
@@ -713,7 +713,7 @@ AbstractQoreNode *QoreApp::sendWithSyncReply(const char *subj, const char *funct
    return rv;
 }
 
-void QoreApp::send(const char *function_name, const AbstractQoreNode *value, ExceptionSink *xsink) {
+void QoreApp::send(ExceptionSink *xsink, const char *function_name, const AbstractQoreNode* value, const char* tracking_info) {
    std::auto_ptr<MTree> msg(make_MTree(function_name, value, xsink));
    if (*xsink)
       return;
@@ -722,7 +722,7 @@ void QoreApp::send(const char *function_name, const AbstractQoreNode *value, Exc
 
    // add tracking info
    MTrackingInfo ti;
-   ti.addApplicationInfo("QORE.send");
+   ti.addApplicationInfo(tracking_info ? tracking_info : "QORE.send");
    msg->setTrackingInfo(ti);
 
    printd(1, "calling mpMPublisher->send()\n");
@@ -730,7 +730,7 @@ void QoreApp::send(const char *function_name, const AbstractQoreNode *value, Exc
    printd(1, "returning from mpMPublisher->send()\n");
 }
 
-void QoreApp::send(const char *subj, const char *function_name, const AbstractQoreNode *value, ExceptionSink *xsink) {
+void QoreApp::send(ExceptionSink *xsink, const char *subj, const char *function_name, const AbstractQoreNode *value, const char* tracking_info) {
    std::auto_ptr<MTree> msg(make_MTree(function_name, value, xsink));
    if (*xsink)
       return;
@@ -739,7 +739,7 @@ void QoreApp::send(const char *subj, const char *function_name, const AbstractQo
 
    // add tracking info
    MTrackingInfo ti;
-   ti.addApplicationInfo("QORE.send");
+   ti.addApplicationInfo(tracking_info ? tracking_info : "QORE.send");
    msg->setTrackingInfo(ti);
 
    // create new publisher
