@@ -11,7 +11,7 @@ single-compilation-unit.cc: $(GENERATED_SRC)
 TIBAE_SOURCES = single-compilation-unit.cc
 else
 TIBAE_SOURCES = QoreApp.cc QC_TibcoAdapter.cc TibCommandLine.cc tibae.cc tibae-module.cc 
-nodist_ssh2_la_SOURCES = $(GENERATED_SRC)
+nodist_tibae_la_SOURCES = $(GENERATED_SRC)
 endif
 
 lib_LTLIBRARIES = tibae.la
