@@ -55,6 +55,11 @@ case "${host_cpu}" in
    *)           cpu_family=${host_cpu} ;;
 esac
 
+# add extra LDFLAGS
+if test -n "$TIBAE_LDFLAGS"; then
+   LDFLAGS="$LDFLAGS $TIBAE_LDFLAGS"
+fi
+
 # set OS-specific variables
 SHLIB_SUFFIX=so
 #echo host_os=${host_os}sss
