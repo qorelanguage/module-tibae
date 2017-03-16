@@ -64,7 +64,7 @@ fi
 SHLIB_SUFFIX=so
 #echo host_os=${host_os}sss
 case "${host_os}" in
-     *linux*)   AC_DEFINE(NEED_ICONV_TRANSLIT, 1, Define to 1 if //TRANSLIT should be added to the destination character set code) 
+     *linux*)   AC_DEFINE(NEED_ICONV_TRANSLIT, 1, Define to 1 if //TRANSLIT should be added to the destination character set code)
 		# set compile flags for Linux
 		CPPFLAGS="${CPPFLAGS} -D_GNU_SOURCE"
 		SHLIB_SUFFIX=so
@@ -181,10 +181,10 @@ if test "$enable_64bit" = "auto"; then
    # turn on 64-bit by default if compiling on a 64-bit platform
    case "${host_cpu}" in
        *64*)
-                 enable_64bit=yes 
+                 enable_64bit=yes
                  ;;
        s390x)
-                 enable_64bit=yes 
+                 enable_64bit=yes
                  ;;
        *)        case "${host_os}" in
                      darwin*)   mv=`uname -r|cut -f1 -d.`
@@ -409,7 +409,7 @@ else
       unset with_tibae
    elif test -n "$SDK_ROOT" -a \( -f "$SDK_ROOT/include/sdk/Maverick.h" -o -f "$SDK_ROOT/include/Maverick.h" \) 2>/dev/null; then
       AC_MSG_RESULT([$SDK_ROOT])
-      with_tibae=$SDK_ROOT      
+      with_tibae=$SDK_ROOT
    else
       AC_MSG_ERROR([not found; cannot build without AE SDK support])
       unset with_tibae
@@ -532,7 +532,7 @@ case "$TIBCO_SDK_VERSION" in
                TIBAE_CPPFLAGS="-I${with_tibae}/include -I${with_tibae}/include/xercesc -I${with_tibco_ems}/clients/c/include -DLINUX24"
                AC_DEFINE(TIBCO_SDK, 5, [define for TIBCO SDK 5.*])
                ;;
-	*)     AC_MSG_ERROR(Unsupported TIBCO SDK Version) 
+	*)     AC_MSG_ERROR(Unsupported TIBCO SDK Version)
 	       ;;
 esac
 
@@ -542,7 +542,7 @@ case "${host_os}" in
      *hpux*)    TIBAE_CPPFLAGS="$TIBAE_CPPFLAGS -DHP_UX +DAportable"
 		;;
      *)		TIBAE_CPPFLAGS="$TIBAE_CPPFLAGS -ldl"
-		;; 
+		;;
 esac
 
 # check if C++ compiler can link with TIBCO libs
@@ -783,7 +783,7 @@ if test "$enable_optimization" = "yes"; then
     elif test "$CXX" = "CC" -a "`echo $host_os|cut -b-7`" = "solaris"; then
         # remove -g with Solaris CC as it reduces optimization levels
 	CXXFLAGS="`echo $CXXFLAGS| sed s/-g//` -xO5" # Solaris CC
-    elif test -n "`echo $CXX|grep aCC`"; then 
+    elif test -n "`echo $CXX|grep aCC`"; then
         # remove -g with HP-UX aCC as it reduces optimization levels
 	CXXFLAGS="`echo $CXXFLAGS| sed s/-g//` +O4" # HP-UX aCC
     fi
